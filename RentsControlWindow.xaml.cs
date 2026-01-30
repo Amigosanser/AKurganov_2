@@ -4,17 +4,21 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Collections.Generic;
 
 namespace AKurganov_2
 {
     public partial class RentsControlWindow : Window
     {
         private dynamic _selectedRent;
+        private List<dynamic> _allRents = new List<dynamic>();
+        private List<dynamic> _filteredRents = new List<dynamic>();
 
         public RentsControlWindow()
         {
             InitializeComponent();
             LoadRents();
+            LoadFilterData();
             icRents.MouseDown += IcRents_MouseDown;
         }
 
@@ -24,7 +28,7 @@ namespace AKurganov_2
             {
                 var context = Entities.GetContext();
 
-                var rents = (from r in context.PaymentApartments
+                _allRents = (from r in context.PaymentApartments
                              join v in context.Visitors on r.VisitorID equals v.ID
                              join s in context.Staffs on r.StaffID equals s.ID
                              orderby r.ID
@@ -39,14 +43,86 @@ namespace AKurganov_2
                                  r.Date,
                                  VisitorFIO = v.FIO,
                                  StaffFIO = s.FIO
-                             }).ToList();
+                             }).ToList<dynamic>();
 
-                icRents.ItemsSource = rents;
+                ApplyFilters();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void LoadFilterData()
+        {
+            try
+            {
+                var context = Entities.GetContext();
+
+                var visitors = context.Visitors
+                    .OrderBy(v => v.FIO)
+                    .Select(v => new { v.ID, v.FIO })
+                    .ToList();
+
+                foreach (var visitor in visitors)
+                {
+                    cmbVisitorFilter.Items.Add(new ComboBoxItem
+                    {
+                        Content = visitor.FIO,
+                        Tag = visitor.ID
+                    });
+                }
+
+                var staff = context.Staffs
+                    .OrderBy(s => s.FIO)
+                    .Select(s => new { s.ID, s.FIO })
+                    .ToList();
+
+                foreach (var staffMember in staff)
+                {
+                    cmbStaffFilter.Items.Add(new ComboBoxItem
+                    {
+                        Content = staffMember.FIO,
+                        Tag = staffMember.ID
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки фильтров: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ApplyFilters()
+        {
+            _filteredRents = _allRents.ToList();
+
+            string searchText = txtSearch.Text?.ToLower() ?? "";
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                _filteredRents = _filteredRents.Where(r =>
+                    (r.VisitorFIO?.ToString()?.ToLower() ?? "").Contains(searchText) ||
+                    (r.StaffFIO?.ToString()?.ToLower() ?? "").Contains(searchText) ||
+                    (r.ID.ToString()?.ToLower() ?? "").Contains(searchText) ||
+                    (r.ApartmentID.ToString()?.ToLower() ?? "").Contains(searchText) ||
+                    (r.Payment.ToString()?.ToLower() ?? "").Contains(searchText)
+                ).ToList();
+            }
+
+            if (cmbVisitorFilter.SelectedItem is ComboBoxItem visitorItem && visitorItem.Tag != null)
+            {
+                int visitorId = (int)visitorItem.Tag;
+                _filteredRents = _filteredRents.Where(r => r.VisitorID == visitorId).ToList();
+            }
+
+            if (cmbStaffFilter.SelectedItem is ComboBoxItem staffItem && staffItem.Tag != null)
+            {
+                int staffId = (int)staffItem.Tag;
+                _filteredRents = _filteredRents.Where(r => r.StaffID == staffId).ToList();
+            }
+
+            icRents.ItemsSource = _filteredRents;
+            ClearAllSelections();
         }
 
         private void IcRents_MouseDown(object sender, MouseButtonEventArgs e)
@@ -128,6 +204,29 @@ namespace AKurganov_2
             }
         }
 
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void cmbVisitorFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void cmbStaffFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ApplyFilters();
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            txtSearch.Text = "";
+            cmbVisitorFilter.SelectedIndex = 0;
+            cmbStaffFilter.SelectedIndex = 0;
+            ApplyFilters();
+        }
+
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             OpenEditorWindow();
@@ -182,6 +281,7 @@ namespace AKurganov_2
                 editorWindow.Closed += (s, args) =>
                 {
                     LoadRents();
+                    LoadFilterData();
                     ClearAllSelections();
                 };
 
