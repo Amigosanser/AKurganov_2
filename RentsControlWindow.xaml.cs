@@ -13,13 +13,15 @@ namespace AKurganov_2
         private dynamic _selectedRent;
         private List<dynamic> _allRents = new List<dynamic>();
         private List<dynamic> _filteredRents = new List<dynamic>();
+        private bool _filtersLoaded = false;
 
         public RentsControlWindow()
         {
             InitializeComponent();
-            LoadRents();
             LoadFilterData();
+            LoadRents();
             icRents.MouseDown += IcRents_MouseDown;
+            _filtersLoaded = true;
         }
 
         private void LoadRents()
@@ -64,19 +66,13 @@ namespace AKurganov_2
                     .Select(v => new { v.ID, v.FIO })
                     .ToList();
 
-                while (cmbVisitorFilter.Items.Count > 1)
-                {
-                    cmbVisitorFilter.Items.RemoveAt(1);
-                }
-
                 foreach (var visitor in visitors)
                 {
-                    var item = new ComboBoxItem
+                    cmbVisitorFilter.Items.Add(new ComboBoxItem
                     {
                         Content = visitor.FIO,
                         Tag = visitor.ID
-                    };
-                    cmbVisitorFilter.Items.Add(item);
+                    });
                 }
 
                 var staff = context.Staffs
@@ -84,19 +80,13 @@ namespace AKurganov_2
                     .Select(s => new { s.ID, s.FIO })
                     .ToList();
 
-                while (cmbStaffFilter.Items.Count > 1)
-                {
-                    cmbStaffFilter.Items.RemoveAt(1);
-                }
-
                 foreach (var staffMember in staff)
                 {
-                    var item = new ComboBoxItem
+                    cmbStaffFilter.Items.Add(new ComboBoxItem
                     {
                         Content = staffMember.FIO,
                         Tag = staffMember.ID
-                    };
-                    cmbStaffFilter.Items.Add(item);
+                    });
                 }
             }
             catch (Exception ex)
@@ -107,6 +97,8 @@ namespace AKurganov_2
 
         private void ApplyFilters()
         {
+            if (!_filtersLoaded) return;
+
             _filteredRents = _allRents.ToList();
 
             string searchText = txtSearch.Text?.ToLower() ?? "";
@@ -121,7 +113,7 @@ namespace AKurganov_2
                 ).ToList();
             }
 
-            if (cmbVisitorFilter.SelectedIndex > 0 && cmbVisitorFilter.SelectedItem is ComboBoxItem visitorItem)
+            if (cmbVisitorFilter.SelectedIndex >= 0 && cmbVisitorFilter.SelectedItem is ComboBoxItem visitorItem)
             {
                 if (visitorItem.Tag != null)
                 {
@@ -130,7 +122,7 @@ namespace AKurganov_2
                 }
             }
 
-            if (cmbStaffFilter.SelectedIndex > 0 && cmbStaffFilter.SelectedItem is ComboBoxItem staffItem)
+            if (cmbStaffFilter.SelectedIndex >= 0 && cmbStaffFilter.SelectedItem is ComboBoxItem staffItem)
             {
                 if (staffItem.Tag != null)
                 {
