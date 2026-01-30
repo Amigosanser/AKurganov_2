@@ -121,16 +121,22 @@ namespace AKurganov_2
                 ).ToList();
             }
 
-            if (cmbVisitorFilter.SelectedItem is ComboBoxItem visitorItem && visitorItem.Tag != null)
+            if (cmbVisitorFilter.SelectedIndex > 0 && cmbVisitorFilter.SelectedItem is ComboBoxItem visitorItem)
             {
-                int visitorId = (int)visitorItem.Tag;
-                _filteredRents = _filteredRents.Where(r => r.VisitorID == visitorId).ToList();
+                if (visitorItem.Tag != null)
+                {
+                    int visitorId = (int)visitorItem.Tag;
+                    _filteredRents = _filteredRents.Where(r => r.VisitorID == visitorId).ToList();
+                }
             }
 
-            if (cmbStaffFilter.SelectedItem is ComboBoxItem staffItem && staffItem.Tag != null)
+            if (cmbStaffFilter.SelectedIndex > 0 && cmbStaffFilter.SelectedItem is ComboBoxItem staffItem)
             {
-                int staffId = (int)staffItem.Tag;
-                _filteredRents = _filteredRents.Where(r => r.StaffID == staffId).ToList();
+                if (staffItem.Tag != null)
+                {
+                    int staffId = (int)staffItem.Tag;
+                    _filteredRents = _filteredRents.Where(r => r.StaffID == staffId).ToList();
+                }
             }
 
             icRents.ItemsSource = _filteredRents;
