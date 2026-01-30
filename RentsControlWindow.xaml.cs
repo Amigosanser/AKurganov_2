@@ -64,13 +64,19 @@ namespace AKurganov_2
                     .Select(v => new { v.ID, v.FIO })
                     .ToList();
 
+                while (cmbVisitorFilter.Items.Count > 1)
+                {
+                    cmbVisitorFilter.Items.RemoveAt(1);
+                }
+
                 foreach (var visitor in visitors)
                 {
-                    cmbVisitorFilter.Items.Add(new ComboBoxItem
+                    var item = new ComboBoxItem
                     {
                         Content = visitor.FIO,
                         Tag = visitor.ID
-                    });
+                    };
+                    cmbVisitorFilter.Items.Add(item);
                 }
 
                 var staff = context.Staffs
@@ -78,13 +84,19 @@ namespace AKurganov_2
                     .Select(s => new { s.ID, s.FIO })
                     .ToList();
 
+                while (cmbStaffFilter.Items.Count > 1)
+                {
+                    cmbStaffFilter.Items.RemoveAt(1);
+                }
+
                 foreach (var staffMember in staff)
                 {
-                    cmbStaffFilter.Items.Add(new ComboBoxItem
+                    var item = new ComboBoxItem
                     {
                         Content = staffMember.FIO,
                         Tag = staffMember.ID
-                    });
+                    };
+                    cmbStaffFilter.Items.Add(item);
                 }
             }
             catch (Exception ex)
