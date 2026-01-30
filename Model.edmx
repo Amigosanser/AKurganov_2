@@ -1,0 +1,583 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Apartments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TypeID" Type="int" Nullable="false" />
+          <Property Name="ConditionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Conditions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ConditionName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentApartments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ApartmentID" Type="int" Nullable="false" />
+          <Property Name="VisitorID" Type="int" Nullable="false" />
+          <Property Name="QuantityDays" Type="int" Nullable="false" />
+          <Property Name="Payment" Type="int" Nullable="false" />
+          <Property Name="StaffID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="RentApartments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ApartmentID" Type="int" Nullable="false" />
+          <Property Name="VisitorID" Type="int" Nullable="false" />
+          <Property Name="QuantityDays" Type="int" Nullable="false" />
+          <Property Name="StaffID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Staffs">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="FIO" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="RoleID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Types">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Seat" Type="int" Nullable="false" />
+          <Property Name="Cost" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Visitors">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="FIO" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Apartments_Conditions">
+          <End Role="Conditions" Type="Self.Conditions" Multiplicity="1" />
+          <End Role="Apartments" Type="Self.Apartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conditions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Apartments">
+              <PropertyRef Name="ConditionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Apartments_Types">
+          <End Role="Types" Type="Self.Types" Multiplicity="1" />
+          <End Role="Apartments" Type="Self.Apartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Types">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Apartments">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentApartments_Apartments">
+          <End Role="Apartments" Type="Self.Apartments" Multiplicity="1" />
+          <End Role="PaymentApartments" Type="Self.PaymentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Apartments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaymentApartments">
+              <PropertyRef Name="ApartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentApartments_Staffs">
+          <End Role="Staffs" Type="Self.Staffs" Multiplicity="1" />
+          <End Role="PaymentApartments" Type="Self.PaymentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staffs">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaymentApartments">
+              <PropertyRef Name="StaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentApartments_Visitors">
+          <End Role="Visitors" Type="Self.Visitors" Multiplicity="1" />
+          <End Role="PaymentApartments" Type="Self.PaymentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visitors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaymentApartments">
+              <PropertyRef Name="VisitorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentApartments_Apartments">
+          <End Role="Apartments" Type="Self.Apartments" Multiplicity="1" />
+          <End Role="RentApartments" Type="Self.RentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Apartments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RentApartments">
+              <PropertyRef Name="ApartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentApartments_Staffs">
+          <End Role="Staffs" Type="Self.Staffs" Multiplicity="1" />
+          <End Role="RentApartments" Type="Self.RentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staffs">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RentApartments">
+              <PropertyRef Name="StaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentApartments_Visitors">
+          <End Role="Visitors" Type="Self.Visitors" Multiplicity="1" />
+          <End Role="RentApartments" Type="Self.RentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visitors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RentApartments">
+              <PropertyRef Name="VisitorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Staffs_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Staffs" Type="Self.Staffs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Staffs">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ModelContainer">
+          <EntitySet Name="Apartments" EntityType="Self.Apartments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Conditions" EntityType="Self.Conditions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentApartments" EntityType="Self.PaymentApartments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RentApartments" EntityType="Self.RentApartments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staffs" EntityType="Self.Staffs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Types" EntityType="Self.Types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Visitors" EntityType="Self.Visitors" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Apartments_Conditions" Association="Self.FK_Apartments_Conditions">
+            <End Role="Conditions" EntitySet="Conditions" />
+            <End Role="Apartments" EntitySet="Apartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Apartments_Types" Association="Self.FK_Apartments_Types">
+            <End Role="Types" EntitySet="Types" />
+            <End Role="Apartments" EntitySet="Apartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentApartments_Apartments" Association="Self.FK_PaymentApartments_Apartments">
+            <End Role="Apartments" EntitySet="Apartments" />
+            <End Role="PaymentApartments" EntitySet="PaymentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentApartments_Staffs" Association="Self.FK_PaymentApartments_Staffs">
+            <End Role="Staffs" EntitySet="Staffs" />
+            <End Role="PaymentApartments" EntitySet="PaymentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentApartments_Visitors" Association="Self.FK_PaymentApartments_Visitors">
+            <End Role="Visitors" EntitySet="Visitors" />
+            <End Role="PaymentApartments" EntitySet="PaymentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentApartments_Apartments" Association="Self.FK_RentApartments_Apartments">
+            <End Role="Apartments" EntitySet="Apartments" />
+            <End Role="RentApartments" EntitySet="RentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentApartments_Staffs" Association="Self.FK_RentApartments_Staffs">
+            <End Role="Staffs" EntitySet="Staffs" />
+            <End Role="RentApartments" EntitySet="RentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentApartments_Visitors" Association="Self.FK_RentApartments_Visitors">
+            <End Role="Visitors" EntitySet="Visitors" />
+            <End Role="RentApartments" EntitySet="RentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Staffs_Roles" Association="Self.FK_Staffs_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Staffs" EntitySet="Staffs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Apartments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="ConditionID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Conditions" Relationship="Self.FK_Apartments_Conditions" FromRole="Apartments" ToRole="Conditions" />
+          <NavigationProperty Name="Types" Relationship="Self.FK_Apartments_Types" FromRole="Apartments" ToRole="Types" />
+          <NavigationProperty Name="PaymentApartments" Relationship="Self.FK_PaymentApartments_Apartments" FromRole="Apartments" ToRole="PaymentApartments" />
+          <NavigationProperty Name="RentApartments" Relationship="Self.FK_RentApartments_Apartments" FromRole="Apartments" ToRole="RentApartments" />
+        </EntityType>
+        <EntityType Name="Conditions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ConditionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Apartments" Relationship="Self.FK_Apartments_Conditions" FromRole="Conditions" ToRole="Apartments" />
+        </EntityType>
+        <EntityType Name="PaymentApartments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ApartmentID" Type="Int32" Nullable="false" />
+          <Property Name="VisitorID" Type="Int32" Nullable="false" />
+          <Property Name="QuantityDays" Type="Int32" Nullable="false" />
+          <Property Name="Payment" Type="Int32" Nullable="false" />
+          <Property Name="StaffID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Apartments" Relationship="Self.FK_PaymentApartments_Apartments" FromRole="PaymentApartments" ToRole="Apartments" />
+          <NavigationProperty Name="Staffs" Relationship="Self.FK_PaymentApartments_Staffs" FromRole="PaymentApartments" ToRole="Staffs" />
+          <NavigationProperty Name="Visitors" Relationship="Self.FK_PaymentApartments_Visitors" FromRole="PaymentApartments" ToRole="Visitors" />
+        </EntityType>
+        <EntityType Name="RentApartments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ApartmentID" Type="Int32" Nullable="false" />
+          <Property Name="VisitorID" Type="Int32" Nullable="false" />
+          <Property Name="QuantityDays" Type="Int32" Nullable="false" />
+          <Property Name="StaffID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Apartments" Relationship="Self.FK_RentApartments_Apartments" FromRole="RentApartments" ToRole="Apartments" />
+          <NavigationProperty Name="Staffs" Relationship="Self.FK_RentApartments_Staffs" FromRole="RentApartments" ToRole="Staffs" />
+          <NavigationProperty Name="Visitors" Relationship="Self.FK_RentApartments_Visitors" FromRole="RentApartments" ToRole="Visitors" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="RoleName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Staffs" Relationship="Self.FK_Staffs_Roles" FromRole="Roles" ToRole="Staffs" />
+        </EntityType>
+        <EntityType Name="Staffs">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="FIO" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PaymentApartments" Relationship="Self.FK_PaymentApartments_Staffs" FromRole="Staffs" ToRole="PaymentApartments" />
+          <NavigationProperty Name="RentApartments" Relationship="Self.FK_RentApartments_Staffs" FromRole="Staffs" ToRole="RentApartments" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Staffs_Roles" FromRole="Staffs" ToRole="Roles" />
+        </EntityType>
+        <EntityType Name="Types">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Seat" Type="Int32" Nullable="false" />
+          <Property Name="Cost" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Apartments" Relationship="Self.FK_Apartments_Types" FromRole="Types" ToRole="Apartments" />
+        </EntityType>
+        <EntityType Name="Visitors">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="FIO" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="PaymentApartments" Relationship="Self.FK_PaymentApartments_Visitors" FromRole="Visitors" ToRole="PaymentApartments" />
+          <NavigationProperty Name="RentApartments" Relationship="Self.FK_RentApartments_Visitors" FromRole="Visitors" ToRole="RentApartments" />
+        </EntityType>
+        <Association Name="FK_Apartments_Conditions">
+          <End Role="Conditions" Type="Self.Conditions" Multiplicity="1" />
+          <End Role="Apartments" Type="Self.Apartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conditions">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Apartments">
+              <PropertyRef Name="ConditionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Apartments_Types">
+          <End Role="Types" Type="Self.Types" Multiplicity="1" />
+          <End Role="Apartments" Type="Self.Apartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Types">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Apartments">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentApartments_Apartments">
+          <End Role="Apartments" Type="Self.Apartments" Multiplicity="1" />
+          <End Role="PaymentApartments" Type="Self.PaymentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Apartments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaymentApartments">
+              <PropertyRef Name="ApartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentApartments_Apartments">
+          <End Role="Apartments" Type="Self.Apartments" Multiplicity="1" />
+          <End Role="RentApartments" Type="Self.RentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Apartments">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RentApartments">
+              <PropertyRef Name="ApartmentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentApartments_Staffs">
+          <End Role="Staffs" Type="Self.Staffs" Multiplicity="1" />
+          <End Role="PaymentApartments" Type="Self.PaymentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staffs">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaymentApartments">
+              <PropertyRef Name="StaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentApartments_Visitors">
+          <End Role="Visitors" Type="Self.Visitors" Multiplicity="1" />
+          <End Role="PaymentApartments" Type="Self.PaymentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visitors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PaymentApartments">
+              <PropertyRef Name="VisitorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentApartments_Staffs">
+          <End Role="Staffs" Type="Self.Staffs" Multiplicity="1" />
+          <End Role="RentApartments" Type="Self.RentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Staffs">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RentApartments">
+              <PropertyRef Name="StaffID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RentApartments_Visitors">
+          <End Role="Visitors" Type="Self.Visitors" Multiplicity="1" />
+          <End Role="RentApartments" Type="Self.RentApartments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visitors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RentApartments">
+              <PropertyRef Name="VisitorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Staffs_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Staffs" Type="Self.Staffs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Staffs">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Apartments" EntityType="Self.Apartments" />
+          <EntitySet Name="Conditions" EntityType="Self.Conditions" />
+          <EntitySet Name="PaymentApartments" EntityType="Self.PaymentApartments" />
+          <EntitySet Name="RentApartments" EntityType="Self.RentApartments" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" />
+          <EntitySet Name="Staffs" EntityType="Self.Staffs" />
+          <EntitySet Name="Types" EntityType="Self.Types" />
+          <EntitySet Name="Visitors" EntityType="Self.Visitors" />
+          <AssociationSet Name="FK_Apartments_Conditions" Association="Self.FK_Apartments_Conditions">
+            <End Role="Conditions" EntitySet="Conditions" />
+            <End Role="Apartments" EntitySet="Apartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Apartments_Types" Association="Self.FK_Apartments_Types">
+            <End Role="Types" EntitySet="Types" />
+            <End Role="Apartments" EntitySet="Apartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentApartments_Apartments" Association="Self.FK_PaymentApartments_Apartments">
+            <End Role="Apartments" EntitySet="Apartments" />
+            <End Role="PaymentApartments" EntitySet="PaymentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentApartments_Apartments" Association="Self.FK_RentApartments_Apartments">
+            <End Role="Apartments" EntitySet="Apartments" />
+            <End Role="RentApartments" EntitySet="RentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentApartments_Staffs" Association="Self.FK_PaymentApartments_Staffs">
+            <End Role="Staffs" EntitySet="Staffs" />
+            <End Role="PaymentApartments" EntitySet="PaymentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentApartments_Visitors" Association="Self.FK_PaymentApartments_Visitors">
+            <End Role="Visitors" EntitySet="Visitors" />
+            <End Role="PaymentApartments" EntitySet="PaymentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentApartments_Staffs" Association="Self.FK_RentApartments_Staffs">
+            <End Role="Staffs" EntitySet="Staffs" />
+            <End Role="RentApartments" EntitySet="RentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RentApartments_Visitors" Association="Self.FK_RentApartments_Visitors">
+            <End Role="Visitors" EntitySet="Visitors" />
+            <End Role="RentApartments" EntitySet="RentApartments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Staffs_Roles" Association="Self.FK_Staffs_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Staffs" EntitySet="Staffs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Apartments">
+            <EntityTypeMapping TypeName="Model.Apartments">
+              <MappingFragment StoreEntitySet="Apartments">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="ConditionID" ColumnName="ConditionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Conditions">
+            <EntityTypeMapping TypeName="Model.Conditions">
+              <MappingFragment StoreEntitySet="Conditions">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ConditionName" ColumnName="ConditionName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentApartments">
+            <EntityTypeMapping TypeName="Model.PaymentApartments">
+              <MappingFragment StoreEntitySet="PaymentApartments">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ApartmentID" ColumnName="ApartmentID" />
+                <ScalarProperty Name="VisitorID" ColumnName="VisitorID" />
+                <ScalarProperty Name="QuantityDays" ColumnName="QuantityDays" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RentApartments">
+            <EntityTypeMapping TypeName="Model.RentApartments">
+              <MappingFragment StoreEntitySet="RentApartments">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ApartmentID" ColumnName="ApartmentID" />
+                <ScalarProperty Name="VisitorID" ColumnName="VisitorID" />
+                <ScalarProperty Name="QuantityDays" ColumnName="QuantityDays" />
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Model.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Staffs">
+            <EntityTypeMapping TypeName="Model.Staffs">
+              <MappingFragment StoreEntitySet="Staffs">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FIO" ColumnName="FIO" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Types">
+            <EntityTypeMapping TypeName="Model.Types">
+              <MappingFragment StoreEntitySet="Types">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Seat" ColumnName="Seat" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visitors">
+            <EntityTypeMapping TypeName="Model.Visitors">
+              <MappingFragment StoreEntitySet="Visitors">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FIO" ColumnName="FIO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

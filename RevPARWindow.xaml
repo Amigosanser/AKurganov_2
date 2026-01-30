@@ -1,0 +1,104 @@
+﻿<Window x:Class="AKurganov_2.RevPARWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Расчет RevPAR (Revenue Per Available Room)"
+        Height="550" 
+        Width="900"
+        WindowStartupLocation="CenterOwner"
+        Closing="Window_Closing">
+
+    <Window.Resources>
+        <ResourceDictionary Source="Dictionary.xaml"/>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" 
+                   Text="Расчет RevPAR (Revenue Per Available Room)" 
+                   FontSize="20" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <TextBlock Text="Начальная дата:" 
+                       Width="120" 
+                       VerticalAlignment="Center"
+                       FontWeight="Bold"/>
+            <DatePicker x:Name="dpStartDate" 
+                       Width="150"/>
+
+            <TextBlock Text="Конечная дата:" 
+                       Width="120" 
+                       VerticalAlignment="Center"
+                       FontWeight="Bold"
+                       Margin="20,0,0,0"/>
+            <DatePicker x:Name="dpEndDate" 
+                       Width="150"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,20">
+            <Button x:Name="btnCalculate" 
+                    Content="Рассчитать RevPAR" 
+                    Width="150" 
+                    Height="35"
+                    Margin="0,0,10,0"
+                    Click="btnCalculate_Click"/>
+            <Button x:Name="btnExport" 
+                    Content="Экспорт в CSV" 
+                    Width="150" 
+                    Height="35"
+                    Margin="10,0,0,0"
+                    Click="btnExport_Click"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="3" 
+                  x:Name="dgRevPARData"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" 
+                                   Binding="{Binding Date, StringFormat=dd.MM.yyyy}" 
+                                   Width="100"/>
+                <DataGridTextColumn Header="Выручка за день" 
+                                   Binding="{Binding DailyRevenue}" 
+                                   Width="120"/>
+                <DataGridTextColumn Header="Занято комнат" 
+                                   Binding="{Binding OccupiedRooms}" 
+                                   Width="120"/>
+                <DataGridTextColumn Header="Всего комнат" 
+                                   Binding="{Binding TotalRooms}" 
+                                   Width="120"/>
+                <DataGridTextColumn Header="Загрузка, %" 
+                                   Binding="{Binding OccupancyRate, StringFormat={}{0:F2}%}" 
+                                   Width="100"/>
+                <DataGridTextColumn Header="ADR" 
+                                   Binding="{Binding ADR, StringFormat={}{0:F2}}" 
+                                   Width="100"/>
+                <DataGridTextColumn Header="RevPAR" 
+                                   Binding="{Binding RevPAR, StringFormat={}{0:F2}}" 
+                                   Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="4" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center"
+                    Margin="0,20,0,0">
+            <Button x:Name="btnBack" 
+                    Content="Назад" 
+                    Width="100" 
+                    Height="35"
+                    Margin="10"
+                    Click="btnBack_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

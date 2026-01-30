@@ -1,0 +1,79 @@
+﻿<Window x:Class="AKurganov_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Управление жилищными услугами" 
+        Height="600" 
+        Width="900"
+        MinHeight="500"
+        MinWidth="700"
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing">
+
+    <Window.Resources>
+        <ResourceDictionary Source="Dictionary.xaml"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" 
+                   Text="Главное меню" 
+                   FontSize="36" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,30"
+                   Foreground="#FF0D47A1"/>
+
+        <StackPanel Grid.Row="1" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center">
+            <Button x:Name="btnApartments" 
+                    Content="Управление Комнатами" 
+                    Style="{StaticResource MainButtonStyle}"
+                    Click="btnApartments_Click"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center">
+            <Button x:Name="btnVisitors" 
+                    Content="Управление Посетителями" 
+                    Style="{StaticResource MainButtonStyle}"
+                    Click="btnVisitors_Click"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center">
+            <Button x:Name="btnRents" 
+                    Content="Управление Арендой" 
+                    Style="{StaticResource MainButtonStyle}"
+                    Click="btnRents_Click"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal"
+                    Margin="0,30">
+            <Button x:Name="btnADR" 
+                    Content="Сформировать ADR" 
+                    Style="{StaticResource StatButtonStyle}"
+                    Click="btnADR_Click"/>
+            <Button x:Name="btnRevPAR" 
+                    Content="Сформировать RevPAR" 
+                    Style="{StaticResource StatButtonStyle}"
+                    Click="btnRevPAR_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

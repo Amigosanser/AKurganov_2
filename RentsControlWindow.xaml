@@ -1,0 +1,129 @@
+﻿<Window x:Class="AKurganov_2.RentsControlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Управление арендой"
+        Height="500" 
+        Width="800"
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing">
+
+    <Window.Resources>
+        <ResourceDictionary Source="Dictionary.xaml"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="10">
+            <TextBlock Text="Управление арендой" 
+                       FontSize="20" 
+                       FontWeight="Bold" 
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="Двойной щелчок для редактирования" 
+                       FontSize="12" 
+                       Foreground="Gray" 
+                       HorizontalAlignment="Center"
+                       Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="icRents" 
+                         Margin="10"
+                         MouseDoubleClick="icRents_MouseDoubleClick">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="LightGray" 
+                                BorderThickness="1" 
+                                Margin="5" 
+                                Background="White"
+                                Cursor="Hand">
+                            <Grid Width="760" Height="120">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Margin="10">
+                                    <TextBlock Text="Аренда" 
+                                               FontSize="16" 
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="ID: " 
+                                               FontSize="12" 
+                                               Foreground="Gray">
+                                        <Run Text="{Binding ID, Mode=OneTime}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="Дата: " 
+                                               FontSize="12" 
+                                               Foreground="Gray">
+                                        <Run Text="{Binding Date, StringFormat=dd.MM.yyyy, Mode=OneTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Margin="10">
+                                    <TextBlock Text="Комната ID: " 
+                                               FontSize="12" 
+                                               Foreground="Gray">
+                                        <Run Text="{Binding ApartmentID, Mode=OneTime}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="Посетитель: " 
+                                               FontSize="12" 
+                                               Foreground="Gray">
+                                        <Run Text="{Binding VisitorFIO, Mode=OneTime}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="Дней: " 
+                                               FontSize="12" 
+                                               Foreground="Gray">
+                                        <Run Text="{Binding QuantityDays, Mode=OneTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Margin="10">
+                                    <TextBlock Text="Сотрудник: " 
+                                               FontSize="12" 
+                                               Foreground="Gray">
+                                        <Run Text="{Binding StaffFIO, Mode=OneTime}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="Оплата: " 
+                                               FontSize="12" 
+                                               Foreground="Gray">
+                                        <Run Text="{Binding Payment, Mode=OneTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,0,0,10">
+            <Button x:Name="btnAdd" 
+                    Content="Добавить аренду" 
+                    Height="35" 
+                    Width="150" 
+                    Margin="5"
+                    Click="btnAdd_Click"/>
+            <Button x:Name="btnDelete" 
+                    Content="Удалить" 
+                    Height="35" 
+                    Width="100" 
+                    Margin="5"
+                    Click="btnDelete_Click"
+                    IsEnabled="False"/>
+            <Button x:Name="btnBack" 
+                    Content="Назад" 
+                    Height="35" 
+                    Width="100" 
+                    Margin="5"
+                    Click="btnBack_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
